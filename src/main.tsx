@@ -4,7 +4,7 @@ import { Theme } from "@radix-ui/themes";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { App } from "./App";
-import { ObjectPoolProvider } from "./contexts";
+import { DataLoaderProvider, ObjectPoolProvider } from "./contexts";
 import { ObjectPool } from "./models";
 
 const objectPool = new ObjectPool();
@@ -13,7 +13,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <Theme>
       <ObjectPoolProvider objectPool={objectPool}>
-        <App />
+        <DataLoaderProvider>
+          <App />
+        </DataLoaderProvider>
       </ObjectPoolProvider>
     </Theme>
   </React.StrictMode>,

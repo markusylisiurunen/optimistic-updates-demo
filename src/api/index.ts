@@ -128,6 +128,7 @@ function makeAPI(): API {
       errorRate = emulate ? EMULATED_ERROR_RATE : 0;
     },
     async bootstrap() {
+      await sleep(100, 500);
       return storage.load();
     },
     async mutate(mutation: AnyMutation) {

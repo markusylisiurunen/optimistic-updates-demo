@@ -29,6 +29,11 @@ class ObjectPool {
     }
   }
 
+  public replace(...models: Model[]): void {
+    this.clear();
+    this.add(...models);
+  }
+
   public delete(model: Model): void {
     if (model instanceof TeamModel) {
       this.teams.delete(model);

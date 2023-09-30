@@ -21,8 +21,9 @@ import {
   useInputExecuteAction,
   useObjectPool,
   useOptimisticExecuteAction,
+  useRequestDataOnMount,
 } from "./hooks";
-import { BubbleModel, ColorModel, Model, TeamModel } from "./models";
+import { BubbleModel, ColorModel, TeamModel } from "./models";
 
 type ColorProps = { color: ColorModel };
 const _Color: React.FC<ColorProps> = ({ color }) => {
@@ -272,51 +273,8 @@ const ErrorRateSwitch: React.FC<ErrorRateSwitchProps> = () => {
 
 type AppProps = Record<string, never>;
 const _App: React.FC<AppProps> = () => {
-  const api = useAPI();
-  const pool = useObjectPool();
-  useEffect(() => {
-    let canceled = false;
-    async function bootstrap() {
-      const models: Model[] = [];
-      const remoteState = await api.bootstrap();
-      for (const remoteTeam of remoteState.teams) {
-        const team = new TeamModel({
-          id: remoteTeam.id,
-          name: remoteTeam.name,
-        });
-        models.push(team);
-        for (const remoteColor of remoteTeam.colors) {
-          const color = new ColorModel({
-            id: remoteColor.id,
-            teamId: team.id,
-            name: remoteColor.name,
-            color: remoteColor.color,
-          });
-          models.push(color);
-        }
-        for (const remoteBubble of remoteTeam.bubbles) {
-          const bubble = new BubbleModel({
-            id: remoteBubble.id,
-            teamId: team.id,
-            colorId: remoteBubble.colorId,
-            createdAt: remoteBubble.createdAt,
-            description: remoteBubble.description,
-            size: remoteBubble.size,
-          });
-          models.push(bubble);
-        }
-      }
-      if (!canceled) {
-        pool.add(...models);
-      }
-    }
-    bootstrap();
-    return () => {
-      canceled = true;
-      pool.clear();
-    };
-  }, [api, pool]);
-  const team = Array.from(pool.teams.all)[0] ?? null;
+  useRequestDataOnMount("bootstrap");
+  const team = Array.from(useObjectPool().teams.all)[0] ?? null;
   if (!team) {
     return null;
   }
