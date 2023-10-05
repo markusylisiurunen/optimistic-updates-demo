@@ -106,8 +106,8 @@ type AnyMutation =
 interface API {
   _getEmulatedErrors(): boolean;
   _setEmulatedErrors(emulate: boolean): void;
-  bootstrap: () => Promise<RemoteState>;
-  mutate: (mutation: AnyMutation) => Promise<void>;
+  bootstrap(): Promise<RemoteState>;
+  mutate(mutation: AnyMutation): Promise<void>;
 }
 
 function makeAPI(): API {
@@ -218,13 +218,5 @@ function makeAPI(): API {
     },
   };
 }
-
-export {
-  type CreateBubbleMutation,
-  type CreateColorMutation,
-  type DeleteBubbleMutation,
-  type UpdateBubbleMutation,
-  type UpdateColorMutation,
-} from "./mutations";
 
 export { makeAPI, type API };

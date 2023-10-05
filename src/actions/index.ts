@@ -1,4 +1,4 @@
-export { ActionContext, type Action, type EffectFunc } from "./action";
+export { ActionContext, type Action, type BoundAction, type EffectFunc } from "./action";
 export { createBubbleAction } from "./bubble-create";
 export { deleteBubbleAction } from "./bubble-delete";
 export { setBubbleColorIdAction } from "./bubble-set-color-id";

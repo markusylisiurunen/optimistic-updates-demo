@@ -1,8 +1,8 @@
 import { createContext } from "react";
 
 interface LockProvider {
-  locked: (key: string) => boolean;
-  withLocks: (keys: string[], func: () => Promise<void>) => Promise<void>;
+  locked(key: string): boolean;
+  withLocks(keys: string[], func: () => Promise<void>): Promise<void>;
 }
 
 class SingularLockProvider implements LockProvider {

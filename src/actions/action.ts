@@ -30,4 +30,16 @@ interface Action<A extends readonly [] | readonly unknown[], R> {
   execute: ActionExecuteFunc<A, R>;
 }
 
-export { ActionContext, type Action, type EffectFunc };
+type BoundAction<R> = Action<[], R>;
+
+function bindAction<A extends readonly [] | readonly unknown[], R>(action: Action<A, R>, ...args: A): BoundAction<R> {
+  return {
+    id: action.id,
+    keys: (context) => (typeof action.keys === "function" ? action.keys(context, ...args) : action.keys),
+    async *execute(context) {
+      return yield* action.execute(context, ...args);
+    },
+  };
+}
+
+export { ActionContext, bindAction, type Action, type BoundAction, type EffectFunc };
